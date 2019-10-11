@@ -1,220 +1,67 @@
 // Garden family tree
 digraph {
-	0 [label=Daniel]
-	1 [label=Rocco]
+	0 [label=Mike]
+	1 [label=Charles]
 	0 -> 1
-	1 [label=Rocco]
-	3 [label=Oscar]
+	1 [label=Charles]
+	3 [label=Jason]
 	1 -> 3
-	3 [label=Oscar]
-	7 [label=John]
-	3 -> 7
-	7 [label=John]
-	15 [label=Mary]
-	7 -> 15
-	15 [label=Mary]
-	24 [label=Frank]
-	15 -> 24
-	24 [label=Frank]
-	36 [label=Mathew]
-	24 -> 36
-	36 [label=Mathew]
-	55 [label=Chris]
-	36 -> 55
-	55 [label=Chris]
-	32 [label=Tiffany]
-	15 -> 32
-	32 [label=Tiffany]
-	21 [label=Shirley]
-	7 -> 21
-	21 [label=Shirley]
-	34 [label=Jeffrey]
-	21 -> 34
-	34 [label=Jeffrey]
-	45 [label=Bobby]
-	34 -> 45
-	45 [label=Bobby]
-	41 [label=Lisa]
-	21 -> 41
-	41 [label=Lisa]
-	11 [label=Beatrice]
-	3 -> 11
-	11 [label=Beatrice]
-	20 [label=Barb]
-	11 -> 20
-	20 [label=Barb]
-	38 [label=Shirley]
-	20 -> 38
-	38 [label=Shirley]
-	51 [label=Michael]
-	38 -> 51
-	51 [label=Michael]
-	59 [label=Gary]
-	51 -> 59
-	59 [label=Gary]
-	65 [label=Pamela]
-	59 -> 65
-	65 [label=Pamela]
-	67 [label=Golden]
-	65 -> 67
-	67 [label=Golden]
-	62 [label=Anita]
-	51 -> 62
-	62 [label=Anita]
-	60 [label=Dorothy]
-	38 -> 60
-	60 [label=Dorothy]
-	31 [label=Becky]
-	11 -> 31
-	31 [label=Becky]
-	5 [label=Karen]
-	1 -> 5
-	5 [label=Karen]
-	8 [label=Patricia]
-	5 -> 8
-	8 [label=Patricia]
-	16 [label=Dorothy]
-	8 -> 16
-	16 [label=Dorothy]
-	25 [label=Pamela]
-	16 -> 25
-	25 [label=Pamela]
-	48 [label=William]
-	25 -> 48
-	48 [label=William]
-	13 [label=Esther]
-	5 -> 13
-	13 [label=Esther]
-	23 [label=James]
-	13 -> 23
-	23 [label=James]
-	42 [label=Deborah]
-	23 -> 42
-	42 [label=Deborah]
-	53 [label=Melinda]
-	42 -> 53
-	53 [label=Melinda]
-	2 [label=David]
+	3 [label=Jason]
+	6 [label=Amanda]
+	3 -> 6
+	6 [label=Amanda]
+	12 [label=Della]
+	6 -> 12
+	12 [label=Della]
+	16 [label=Donna]
+	6 -> 16
+	16 [label=Donna]
+	20 [label=Jared]
+	6 -> 20
+	20 [label=Jared]
+	13 [label=Leland]
+	3 -> 13
+	13 [label=Leland]
+	7 [label=Coleen]
+	1 -> 7
+	7 [label=Coleen]
+	14 [label=Constance]
+	7 -> 14
+	14 [label=Constance]
+	18 [label=Dennis]
+	7 -> 18
+	18 [label=Dennis]
+	2 [label=Larry]
 	0 -> 2
-	2 [label=David]
-	6 [label=Earl]
-	2 -> 6
-	6 [label=Earl]
-	9 [label=Courtney]
-	6 -> 9
-	9 [label=Courtney]
-	17 [label=Patricia]
-	9 -> 17
-	17 [label=Patricia]
-	26 [label=Anthony]
-	17 -> 26
-	26 [label=Anthony]
-	37 [label=Ruth]
-	26 -> 37
-	37 [label=Ruth]
-	47 [label=David]
-	37 -> 47
-	47 [label=David]
-	56 [label=Barry]
-	47 -> 56
-	56 [label=Barry]
-	49 [label=So]
-	26 -> 49
-	49 [label=So]
-	33 [label=Dana]
-	17 -> 33
-	33 [label=Dana]
-	52 [label=Lynn]
-	33 -> 52
-	52 [label=Lynn]
-	27 [label=Peter]
-	9 -> 27
-	27 [label=Peter]
-	14 [label=Daniela]
-	6 -> 14
-	14 [label=Daniela]
-	30 [label=Harold]
-	14 -> 30
-	30 [label=Harold]
-	44 [label=Jessica]
-	30 -> 44
-	44 [label=Jessica]
-	54 [label=William]
-	44 -> 54
-	54 [label=William]
-	63 [label=Tad]
-	54 -> 63
-	63 [label=Tad]
-	66 [label=Barbara]
-	63 -> 66
-	66 [label=Barbara]
-	64 [label=Eric]
-	54 -> 64
-	64 [label=Eric]
-	68 [label=Arthur]
-	64 -> 68
-	68 [label=Arthur]
-	69 [label=Philip]
-	68 -> 69
-	69 [label=Philip]
-	71 [label=Suzanne]
-	69 -> 71
-	71 [label=Suzanne]
-	72 [label=Catherine]
-	71 -> 72
-	72 [label=Catherine]
-	70 [label=Amanda]
-	68 -> 70
-	70 [label=Amanda]
-	50 [label=Fay]
-	30 -> 50
-	50 [label=Fay]
-	18 [label=Youlanda]
-	6 -> 18
-	18 [label=Youlanda]
-	39 [label=Anthony]
-	18 -> 39
-	39 [label=Anthony]
-	61 [label=Kelly]
-	39 -> 61
-	61 [label=Kelly]
-	4 [label=Reginald]
+	2 [label=Larry]
+	5 [label=Joseph]
+	2 -> 5
+	5 [label=Joseph]
+	10 [label=Manuel]
+	5 -> 10
+	10 [label=Manuel]
+	17 [label=Rene]
+	5 -> 17
+	17 [label=Rene]
+	9 [label=Bill]
+	2 -> 9
+	9 [label=Bill]
+	15 [label=Rodney]
+	9 -> 15
+	15 [label=Rodney]
+	21 [label=David]
+	15 -> 21
+	21 [label=David]
+	11 [label=Sonya]
+	2 -> 11
+	11 [label=Sonya]
+	4 [label=William]
 	0 -> 4
-	4 [label=Reginald]
-	10 [label=Frank]
-	4 -> 10
-	10 [label=Frank]
-	19 [label=Chris]
-	10 -> 19
-	19 [label=Chris]
-	35 [label=Noah]
-	19 -> 35
-	35 [label=Noah]
-	57 [label=Paula]
-	35 -> 57
-	57 [label=Paula]
-	40 [label=Angela]
-	19 -> 40
-	40 [label=Angela]
-	28 [label=Randi]
-	10 -> 28
-	28 [label=Randi]
-	43 [label=Milton]
-	28 -> 43
-	43 [label=Milton]
-	58 [label=Victor]
-	43 -> 58
-	58 [label=Victor]
-	12 [label=Troy]
-	4 -> 12
-	12 [label=Troy]
-	22 [label=Norman]
-	12 -> 22
-	22 [label=Norman]
-	46 [label=Sally]
-	22 -> 46
-	46 [label=Sally]
-	29 [label=Joseph]
-	12 -> 29
-	29 [label=Joseph]
+	4 [label=William]
+	8 [label=Candace]
+	4 -> 8
+	8 [label=Candace]
+	19 [label=William]
+	8 -> 19
+	19 [label=William]
 }

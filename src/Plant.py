@@ -19,10 +19,13 @@ class Plant:
         self.age_rate = 2
         self.spawn_ages = [10, 16, 20]
         self.spawn_r = 3
+        self.alive = True
 
     def age_plant(self):
         if self.age != self.age_max:
             self.age += self.age_rate
+        else:
+            self.alive = False
 
     def tick(self):
         self.age_plant()

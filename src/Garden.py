@@ -25,6 +25,7 @@ class Garden:
         p = Plant(self, position, 0)
         self.plant_grid[p.position[0]][p.position[1]] = p
         self.plants.append(p)
+        self.n_alive = 1
         print("Creating new garden")
 
     def create_environment(self, n_elems):
@@ -39,12 +40,15 @@ class Garden:
         return environment
 
     def tick(self):
+        self.n_alive = 0
         for p in self.plants:
             p.tick()
             if p.ready:
                 child = p.spawn()
                 if child:
                     self.add_plant(child)
+            if p.alive:
+                self.n_alive += 1
 
     def add_plant(self, p):
         self.plants.append(p)

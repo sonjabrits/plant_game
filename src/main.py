@@ -32,7 +32,12 @@ if __name__ == "__main__":
             x = int(float(p.position[0])/GARDEN_SIZE[0]*WIDTH)
             y = int(float(p.position[1])/GARDEN_SIZE[1]*LENGTH)
             size = 3 + p.age
-            pygame.draw.rect(gameDisplay, GREEN, [x, y, size, size])
+            if p.alive:
+                pygame.draw.rect(gameDisplay, GREEN, [x, y, size, size])
+            else:
+                color = pygame.Color('orange')
+                pygame.draw.rect(gameDisplay, color, [x, y, size, size])
+
 
         for elem in my_garden.env_elems:
             x = int(float(elem.position[0])/GARDEN_SIZE[0]*WIDTH)
@@ -47,6 +52,8 @@ if __name__ == "__main__":
         my_graphdrawer = GraphDrawer()
         my_graphdrawer.draw_family_graph(my_garden)
 
+        if my_garden.n_alive == 0:
+            crashed = True
         print(pygame.time.get_ticks()/1000)
         pygame.display.update()
         clock.tick(fps) #
