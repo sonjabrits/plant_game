@@ -68,6 +68,6 @@ class Garden:
         self.plant_group.add(p)
         self.all_group.add(p)
 
-    def is_collision(self, position, group):
-        self.temp_sprite.rect = pygame.Rect(position[0], position[1], GRID_SIZE, GRID_SIZE)
-        return not (len(pygame.sprite.spritecollide(self.temp_sprite, group, False)) == 0)
+    def is_collision(self, position, group, size=[GRID_SIZE, GRID_SIZE]):
+        self.temp_sprite.rect = pygame.Rect(position[0], position[1], size[0], size[1])
+        return len(pygame.sprite.spritecollide(self.temp_sprite, group, False)) > 0

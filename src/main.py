@@ -71,3 +71,10 @@ if __name__ == "__main__":
         # pygame.image.save(gameDisplay, "../screenshots/screenshot" + str(counter).zfill(3) + ".jpeg")
         counter += 1
         clock.tick(fps)
+
+    my_garden.background_group.draw(gameDisplay)
+    my_game_handler.message_display("Congratulations! You got " + str(my_char.inventory["flowers"]) + " FLOWERS",
+                                    [int(SCREEN_SIZE[0] / 2), int(SCREEN_SIZE[1] / 2)])
+
+    pygame.display.update()
+    pygame.time.wait(2000)

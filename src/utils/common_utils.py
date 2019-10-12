@@ -3,7 +3,7 @@ from random import randint, random
 import pygame
 
 
-def random_position(limits, center=None, radius=None):
+def random_position(limits, center=None, radius=None, size=[0, 0]):
     if center is None:
         center = [round(limits[0] / 2), round(limits[1] / 2)]
         radius = [math.floor(limits[0] / 2), math.floor(limits[1] / 2)]
