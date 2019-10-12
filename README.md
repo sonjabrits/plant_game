@@ -2,6 +2,8 @@
 
 A basic plant game, where plants grow in a garden. There are rocks and water, which act as obstacles for plants and the character. The character can run around and collect "mature" flowers. When all the flowers are dead, the game is over.
 
+<img src="https://github.com/sonjabrits/plant_game/blob/master/plant_game.PNG?raw=true" alt="Plant Game Screenshot" height="400">
+
 ## Current features
 ### Flowers
 * One flower spawns at a random location at the beginning of the game.
