@@ -1,28 +1,28 @@
 import sys
 
-import pygame
-
-from src.Garden import *
+from src.Garden import Garden
+from src.Sprites import Plant, GardenElem, Character
 from src.utils.global_vars import *
+from src.utils.common_utils import *
+from src.utils.game_screen import GameHandler
 
 if __name__ == "__main__":
     pygame.init()
 
     gameDisplay = pygame.display.set_mode(SCREEN_SIZE)
+    my_game_handler = GameHandler(gameDisplay)
     clock = pygame.time.Clock()
-
     crashed = False
+    key_state = [False, False, False, False]  # L, R, U, D
+    counter = 0
+
     my_garden = Garden(GARDEN_SIZE)
-
-    characters = pygame.sprite.Group()
-    my_char = Character(my_garden, [0, 0])
-    characters.add(my_char)
-
     my_garden.background_group.draw(gameDisplay)
 
-    key_state = [False, False, False, False]  # L, R, U, D
+    characters = pygame.sprite.Group()
+    my_char = Character(my_garden)
+    characters.add(my_char)
 
-    counter = 0
     while not crashed:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -61,9 +61,11 @@ if __name__ == "__main__":
         my_char.process_keys(key_state)
         characters.update(counter)
         characters.draw(gameDisplay)
+        my_game_handler.message_display("Flowers: " + str(my_char.inventory["flowers"]))
 
-        if my_garden.n_alive < 1:  # len(my_garden.plant_group.sprites()) == 0:
+        if my_garden.n_alive < 1:
             print("Going to exit, no more living plants")
+            print("Congratz, you collected " + str(my_char.inventory["flowers"]) + " flowers")
             crashed = True
         pygame.display.update()
         # pygame.image.save(gameDisplay, "../screenshots/screenshot" + str(counter).zfill(3) + ".jpeg")

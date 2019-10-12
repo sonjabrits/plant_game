@@ -1,7 +1,6 @@
-from src.GardenElements import *
+from src.Sprites import *
 from src.utils.common_utils import *
 from src.utils.global_vars import *
-import pygame
 
 
 class Garden:
@@ -30,9 +29,6 @@ class Garden:
         self.all_group.add(p)
         self.n_alive = 1
         self.all_plants = 1
-
-        # self.graph_drawer = GraphDrawer()
-        # self.graph_drawer.add_node(p)
 
         print("Creating new garden")
 
@@ -74,4 +70,4 @@ class Garden:
 
     def is_collision(self, position, group):
         self.temp_sprite.rect = pygame.Rect(position[0], position[1], GRID_SIZE, GRID_SIZE)
-        return len(pygame.sprite.spritecollide(self.temp_sprite, group, False)) == 0
+        return not (len(pygame.sprite.spritecollide(self.temp_sprite, group, False)) == 0)

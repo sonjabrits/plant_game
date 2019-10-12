@@ -1,5 +1,6 @@
 import math
-from random import randint
+from random import randint, random
+import pygame
 
 
 def random_position(limits, center=None, radius=None):

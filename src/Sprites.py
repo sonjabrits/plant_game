@@ -13,7 +13,6 @@ WATER = 1
 GRASS = 2
 
 CHAR_MODES = ["left", "right", "up", "down", "stand"]
-
 LEFT = 0
 RIGHT = 1
 UP = 2
@@ -26,6 +25,7 @@ MATURE = 1
 WILTING = 2
 DYING = 3
 DEAD = 4
+
 
 class Plant(pygame.sprite.Sprite):
     def __init__(self, garden, position, id, parent=None):
@@ -44,12 +44,10 @@ class Plant(pygame.sprite.Sprite):
         self.alive = True
         self.age_rate = 1
         self.ages = [0, 105, 400, 600, 700, 750]
-        self.spawn_nr = 3
-        self.spawn_r = 2
+        self.spawn_r = 3
+        self.spawn_chance = 0.8
 
-        self.rect = pygame.Rect(int(float(position[0]) * GRID_SIZE), int(float(position[1]) * GRID_SIZE), GRID_SIZE,
-                                GRID_SIZE)
-
+        self.rect = pygame.Rect(position[0] * GRID_SIZE, position[1] * GRID_SIZE, GRID_SIZE, GRID_SIZE)
         self.state = GROWING
         self.all_images = {}
         for mode in FLOWER_STATES:
@@ -73,19 +71,21 @@ class Plant(pygame.sprite.Sprite):
                 self.ready = True
             if self.age > self.ages[DEAD]:
                 self.state = DEAD
-                self.garden.n_alive -= 1
-                self.alive = False
-                self.kill()
+                self.kill_flower()
                 return True
         return False
 
+    def kill_flower(self):
+        self.garden.n_alive -= 1
+        self.alive = False
+        self.kill()
+
     def tick(self):
-        died = self.age_plant()
-        return died
+        return self.age_plant()
 
     def spawn(self):
-        if self.ready:
-            self.ready = False
+        self.ready = False
+        if self.spawn_chance > random():  # Make it less likely to actually spawn a child plant
             [x, y] = random_position([GARDEN_SIZE[0], GARDEN_SIZE[1]], self.position, [self.spawn_r, self.spawn_r])
             temp_sprite = pygame.sprite.Sprite()
             temp_sprite.rect = pygame.Rect(int(float(x) * GRID_SIZE), int(float(y) * GRID_SIZE), GRID_SIZE, GRID_SIZE)
@@ -133,13 +133,22 @@ class GardenElem(pygame.sprite.Sprite):
 
 
 class Character(pygame.sprite.Sprite):
-    def __init__(self, garden, position):
+    def __init__(self, garden, position=None):
         pygame.sprite.Sprite.__init__(self)
         self.garden = garden
-        self.position = position
+        if position is not None:
+            self.position = position
+        else:
+            position = random_position([GRID_SIZE * (GARDEN_SIZE[0] - 1), GRID_SIZE * (GARDEN_SIZE[1] - 1)])
+            print(self.garden.is_collision(position, self.garden.env_group))
+            while self.garden.is_collision(position, self.garden.env_group):
+                print(position)
+                position = random_position([GARDEN_SIZE[0], GARDEN_SIZE[1]])
+            self.position = position
         self.rect = pygame.Rect(int(float(position[0]) * GRID_SIZE), int(float(position[1]) * GRID_SIZE),
                                 GRID_SIZE,
                                 GRID_SIZE)
+        self.inventory = {"flowers": 0}
         self.mode = STAND
         self.all_images = {}
         for name in os.listdir("../sprites/character/" + "/"):
@@ -163,6 +172,12 @@ class Character(pygame.sprite.Sprite):
                 self.img_idx = 0
             self.image = self.all_images[CHAR_MODES[self.mode]][self.img_idx]
 
+        plant_collide = pygame.sprite.spritecollide(self, self.garden.plant_group, False)
+        for plant in plant_collide:
+            if plant.state == MATURE:
+                plant.kill_flower()
+                self.inventory["flowers"] += 1
+
     def process_keys(self, key_state):
         self.garden.temp_sprite = pygame.sprite.Sprite()
         x = self.position[0]
@@ -177,11 +192,11 @@ class Character(pygame.sprite.Sprite):
                     self.change_mode(DOWN)
                 if key_state[LEFT] or key_state[RIGHT]:
                     temp = max(0, min(self.position[1] + MOVE_SIZE / 2, GRID_SIZE * (GARDEN_SIZE[1] - 1)))
-                    if self.garden.is_collision([x, temp], self.garden.env_group):
+                    if not self.garden.is_collision([x, temp], self.garden.env_group):
                         y = temp
                 else:
                     temp = max(0, min(self.position[1] + MOVE_SIZE, GRID_SIZE * (GARDEN_SIZE[1] - 1)))
-                    if self.garden.is_collision([x, temp], self.garden.env_group):
+                    if not self.garden.is_collision([x, temp], self.garden.env_group):
                         y = temp
 
             if key_state[UP]:
@@ -189,22 +204,22 @@ class Character(pygame.sprite.Sprite):
                     self.change_mode(UP)
                 if key_state[LEFT] or key_state[RIGHT]:
                     temp = max(0, min(self.position[1] - MOVE_SIZE / 2, GRID_SIZE * (GARDEN_SIZE[1] - 1)))
-                    if self.garden.is_collision([x, temp], self.garden.env_group):
+                    if not self.garden.is_collision([x, temp], self.garden.env_group):
                         y = temp
                 else:
                     temp = max(0, min(self.position[1] - MOVE_SIZE, GRID_SIZE * (GARDEN_SIZE[1] - 1)))
-                    if self.garden.is_collision([x, temp], self.garden.env_group):
+                    if not self.garden.is_collision([x, temp], self.garden.env_group):
                         y = temp
 
             if not (key_state[LEFT] and key_state[RIGHT]):
                 if key_state[LEFT]:
                     temp = max(0, min(self.position[0] - MOVE_SIZE / 2, GRID_SIZE * (GARDEN_SIZE[0] - 1)))
-                    if self.garden.is_collision([temp, y], self.garden.env_group):
+                    if not self.garden.is_collision([temp, y], self.garden.env_group):
                         x = temp
 
                 if key_state[RIGHT]:
                     temp = max(0, min(self.position[0] + MOVE_SIZE / 2, GRID_SIZE * (GARDEN_SIZE[0] - 1)))
-                    if self.garden.is_collision([temp, y], self.garden.env_group):
+                    if not self.garden.is_collision([temp, y], self.garden.env_group):
                         x = temp
         else:
             if key_state[LEFT] and key_state[RIGHT]:
@@ -215,13 +230,13 @@ class Character(pygame.sprite.Sprite):
                     if self.mode != LEFT:
                         self.change_mode(LEFT)
                     temp = max(0, min(self.position[0] - MOVE_SIZE, GRID_SIZE * (GARDEN_SIZE[0] - 1)))
-                    if self.garden.is_collision([temp, y], self.garden.env_group):
+                    if not self.garden.is_collision([temp, y], self.garden.env_group):
                         x = temp
                 if key_state[RIGHT]:
                     if self.mode != RIGHT:
                         self.change_mode(RIGHT)
                     temp = max(0, min(self.position[0] + MOVE_SIZE, GRID_SIZE * (GARDEN_SIZE[0] - 1)))
-                    if self.garden.is_collision([temp, y], self.garden.env_group):
+                    if not self.garden.is_collision([temp, y], self.garden.env_group):
                         x = temp
 
         self.position = [x, y]
