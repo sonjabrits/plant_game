@@ -68,7 +68,6 @@ if __name__ == "__main__":
             print("Congratz, you collected " + str(my_char.inventory["flowers"]) + " flowers")
             crashed = True
         pygame.display.update()
-        # pygame.image.save(gameDisplay, "../screenshots/screenshot" + str(counter).zfill(3) + ".jpeg")
         counter += 1
         clock.tick(fps)
 
