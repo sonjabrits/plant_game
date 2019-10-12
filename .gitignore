@@ -125,3 +125,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+/screenshots/
+/src/family_tree.gv
+/src/family_tree.gv.pdf

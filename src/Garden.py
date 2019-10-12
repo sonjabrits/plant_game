@@ -1,82 +1,85 @@
-from src.Plant import *
-from time import time
-import numpy as np
 from random import randint
 
-ROCK = 0
-WATER = 1
+import pygame
 
-ENV_ELEMS = {
-    "Rock" : ROCK,
-    "Water" : WATER
-}
+from src.GardenElements import *
+from src.utils.common_utils import *
+from src.utils.global_vars import *
+
 
 class Garden:
-    def __init__(self, size=[10,10], n_elems=10):
+    def __init__(self, size=[10, 10]):
         self.grid_size = size
-        self.env_elems = []
-        self.env_grid = self.create_environment(n_elems)
+        self.all_group = pygame.sprite.Group()
+        self.env_group = pygame.sprite.Group()
+        self.background_group = pygame.sprite.Group()
+        self.env_grid = self.create_environment(N_ELEMS)
 
-        self.plants = []
-        self.plant_grid = [[None for i in range(0,size[1])] for j in range(0,size[0])]
-        position = self.random_position()
-        while not self.is_free(self.env_grid, position):
-            position = self.random_position()
+        self.plant_group = pygame.sprite.Group()
+        self.plant_grid = [[None for i in range(0, size[1])] for j in range(0, size[0])]
+        position = random_position([GARDEN_SIZE[0], GARDEN_SIZE[1]])
+        self.temp_sprite = pygame.sprite.Sprite()
+        self.temp_sprite.rect = pygame.Rect(int(float(position[0]) * GRID_SIZE), int(float(position[1]) * GRID_SIZE),
+                                            GRID_SIZE, GRID_SIZE)
+
+        while len(pygame.sprite.spritecollide(self.temp_sprite, self.env_group, False)) != 0:
+            position = random_position([GARDEN_SIZE[0], GARDEN_SIZE[1]])
+            self.temp_sprite.rect = pygame.Rect(int(float(position[0]) * GRID_SIZE),
+                                                int(float(position[1]) * GRID_SIZE), GRID_SIZE, GRID_SIZE)
         p = Plant(self, position, 0)
+        self.plant_elder = p
         self.plant_grid[p.position[0]][p.position[1]] = p
-        self.plants.append(p)
+        self.plant_group.add(p)
+        self.all_group.add(p)
         self.n_alive = 1
+        self.all_plants = 1
+
+        # self.graph_drawer = GraphDrawer()
+        # self.graph_drawer.add_node(p)
+
         print("Creating new garden")
 
     def create_environment(self, n_elems):
         environment = [[None for i in range(0, self.grid_size[1])] for j in range(0, self.grid_size[0])]
         for i in range(0, n_elems):
-            position = self.random_position()
-            if self.is_free(environment, position):
-                elem_type = randint(0, len(ENV_ELEMS))
+            position = random_position([GARDEN_SIZE[0], GARDEN_SIZE[1]])
+            temp_sprite = pygame.sprite.Sprite()
+            temp_sprite.rect = pygame.Rect(int(float(position[0]) * GRID_SIZE), int(float(position[1]) * GRID_SIZE),
+                                           GRID_SIZE, GRID_SIZE)
+
+            if len(pygame.sprite.spritecollide(temp_sprite, self.env_group, False)) == 0:
+                elem_type = randint(0, len(ENV_ELEMS) - 2)
                 elem = GardenElem(position, elem_type)
                 environment[position[0]][position[1]] = elem
-                self.env_elems.append(elem)
+                self.env_group.add(elem)
+                self.all_group.add(elem)
+
+        for i in range(0, GARDEN_SIZE[0]):
+            for j in range(0, GARDEN_SIZE[1]):
+                self.background_group.add(GardenElem([i, j], GRASS))
         return environment
 
-    def tick(self):
-        self.n_alive = 0
-        for p in self.plants:
+    def tick(self, counter):
+        self.env_group.update(counter)
+        self.plant_group.update(counter)
+        for p in self.plant_group.sprites():
             p.tick()
+            # if p.tick():
+            # self.graph_drawer.update_node(p)
             if p.ready:
                 child = p.spawn()
                 if child:
+                    self.all_plants += 1
                     self.add_plant(child)
-            if p.alive:
-                self.n_alive += 1
+        # self.graph_drawer.render_graph()
 
     def add_plant(self, p):
-        self.plants.append(p)
-        self.plant_grid[p.position[0]][p.position[1]] = p
+        self.n_alive += 1
+        self.plant_group.add(p)
+        self.all_group.add(p)
+        # self.graph_drawer.add_node(p)
+        # self.graph_drawer.add_edge(p, p.parent)
 
-        print("Garden currently has " + str(len(self.plants)) + " plants")
-
-
-    def is_free(self, grid, position):
-        if grid[position[0]][position[1]] is not None:
-            return False
-        return True
-
-    def can_plant(self, position):
-        if self.is_free(self.plant_grid, position) and self.is_free(self.env_grid, position):
-            return True
-        return False
-
-    def random_position(self):
-        x = randint(0, self.grid_size[0]-1)
-        y = randint(0, self.grid_size[1]-1)
-        return [x, y]
-
-class GardenElem:
-    def __init__(self, position, elem_type):
-        self.elem_type = elem_type
-        self.position = position
-        self.size = 15
-
-
-
+    def is_collision(self, position, group):
+        self.temp_sprite.rect = pygame.Rect(position[0], position[1], GRID_SIZE, GRID_SIZE)
+        return len(pygame.sprite.spritecollide(self.temp_sprite, group, False)) == 0

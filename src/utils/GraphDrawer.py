@@ -1,20 +1,17 @@
-from src.Garden import *
 from graphviz import Digraph
 
 class GraphDrawer:
     def __init__(self):
-        pass
+        self.dot = Digraph(comment='Garden family tree')
 
-    def draw_family_graph(self, garden):
-        dot = Digraph(comment='Garden family tree')
-        p = garden.plants[0]
-        self.gotochild(dot, p)
-        dot.render('family_tree.gv', view=False)
+    def add_node(self, p):
+        self.dot.node(str(p.id), label=p.name)
 
-    def gotochild(self, dot, p):
-        dot.node(str(p.id), label=p.name)
-        if p.children:
-            for c in p.children:
-                dot.node(str(c.id), label=c.name)
-                dot.edge(str(p.id), str(c.id))
-                self.gotochild(dot, c)
+    def add_edge(self, p, parent):
+        self.dot.edge(str(parent.id), str(p.id))
+
+    def update_node(self, p):
+        self.dot.node(str(p.id), label=p.name, style='filled', fillcolor='lightgray')
+
+    def render_graph(self):
+        self.dot.render('family_tree.gv', view=False)
