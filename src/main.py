@@ -66,6 +66,6 @@ if __name__ == "__main__":
             print("Going to exit, no more living plants")
             crashed = True
         pygame.display.update()
-        pygame.image.save(gameDisplay, "../screenshots/screenshot" + str(counter).zfill(3) + ".jpeg")
+        # pygame.image.save(gameDisplay, "../screenshots/screenshot" + str(counter).zfill(3) + ".jpeg")
         counter += 1
         clock.tick(fps)

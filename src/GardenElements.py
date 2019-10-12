@@ -20,6 +20,12 @@ UP = 2
 DOWN = 3
 STAND = 4
 
+FLOWER_STATES = ["growing", "mature", "wilting", "dying", "dead"]
+GROWING = 0
+MATURE = 1
+WILTING = 2
+DYING = 3
+DEAD = 4
 
 class Plant(pygame.sprite.Sprite):
     def __init__(self, garden, position, id, parent=None):
@@ -36,29 +42,37 @@ class Plant(pygame.sprite.Sprite):
         self.ready = False
         self.age = 0.0
         self.alive = True
-        self.age_max = 400
         self.age_rate = 1
-        self.spawn_interv = [10, 20, 40, 50, 60, 90]
-        self.spawn_ages = [round(i / 100 * self.age_max) for i in self.spawn_interv]
-        self.spawn_r = 1
+        self.ages = [0, 105, 400, 600, 700, 750]
+        self.spawn_nr = 3
+        self.spawn_r = 2
 
         self.rect = pygame.Rect(int(float(position[0]) * GRID_SIZE), int(float(position[1]) * GRID_SIZE), GRID_SIZE,
                                 GRID_SIZE)
-        self.images = []
+
+        self.state = GROWING
+        self.all_images = {}
+        for mode in FLOWER_STATES:
+            for name in os.listdir("../sprites/flower/" + mode + "/"):
+                if name.endswith(".png"):
+                    if mode not in self.all_images.keys():
+                        self.all_images[mode] = []
+                    self.all_images[mode].append(
+                        pygame.transform.scale(
+                            pygame.image.load("../sprites/flower/" + mode + "/" + name).convert_alpha(),
+                            (GRID_SIZE, GRID_SIZE)))
         self.img_idx = 0
-        string_t = "flower"
-        for name in os.listdir("../sprites/" + string_t + "/"):
-            if name.endswith(".png"):
-                self.images.append(
-                    pygame.transform.scale(pygame.image.load("../sprites/" + string_t + "/" + name).convert_alpha(),
-                                           (GRID_SIZE, GRID_SIZE)))
-        self.image = self.images[self.img_idx]
+        self.image = self.all_images[FLOWER_STATES[self.state]][self.img_idx]
 
     def age_plant(self):
         if self.alive:
-            if self.age < self.age_max:
-                self.age += self.age_rate
-            else:
+            self.age += self.age_rate
+            if self.age > self.ages[self.state + 1]:
+                self.state += 1
+                self.img_idx = 0
+                self.ready = True
+            if self.age > self.ages[DEAD]:
+                self.state = DEAD
                 self.garden.n_alive -= 1
                 self.alive = False
                 self.kill()
@@ -67,8 +81,6 @@ class Plant(pygame.sprite.Sprite):
 
     def tick(self):
         died = self.age_plant()
-        if self.age in self.spawn_ages:
-            self.ready = True
         return died
 
     def spawn(self):
@@ -85,8 +97,12 @@ class Plant(pygame.sprite.Sprite):
         return None
 
     def update(self, counter):
-        self.img_idx = min(round(self.age / self.age_max * len(self.images)), len(self.images) - 1)
-        self.image = self.images[self.img_idx]
+        age_gap = self.ages[self.state + 1] - self.ages[self.state] if self.state < len(FLOWER_STATES) - 1 else 0
+        age_base = self.ages[self.state]
+        age_interval = self.age - age_base
+        self.img_idx = min(round(age_interval / age_gap * len(self.all_images[FLOWER_STATES[self.state]])),
+                           len(self.all_images[FLOWER_STATES[self.state]]) - 1)
+        self.image = self.all_images[FLOWER_STATES[self.state]][self.img_idx]
 
 
 class GardenElem(pygame.sprite.Sprite):
@@ -108,7 +124,7 @@ class GardenElem(pygame.sprite.Sprite):
         self.image = self.images[self.img_idx]
 
     def update(self, counter):
-        if ((counter % fps) + 1) % int((fps / ANIMATION_SPEED)) == 0:
+        if ((counter % fps) + 1) % int(math.ceil(fps / ANIMATION_SPEED)) == 0:
             if self.img_idx < len(self.images) - 1:
                 self.img_idx += 1
             else:
@@ -140,7 +156,7 @@ class Character(pygame.sprite.Sprite):
         self.image = self.all_images[CHAR_MODES[self.mode]][self.img_idx]
 
     def update(self, counter):
-        if ((counter % fps) + 1) % int((fps / ANIMATION_SPEED)) == 0:
+        if ((counter % fps) + 1) % int(math.ceil(float(fps) / float(ANIMATION_SPEED))) == 0:
             if self.img_idx < len(self.all_images[CHAR_MODES[self.mode]]) - 1:
                 self.img_idx += 1
             else:
