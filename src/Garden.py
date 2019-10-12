@@ -1,7 +1,3 @@
-from random import randint
-
-import pygame
-
 from src.GardenElements import *
 from src.utils.common_utils import *
 from src.utils.global_vars import *
@@ -64,21 +60,16 @@ class Garden:
         self.plant_group.update(counter)
         for p in self.plant_group.sprites():
             p.tick()
-            # if p.tick():
-            # self.graph_drawer.update_node(p)
             if p.ready:
                 child = p.spawn()
                 if child:
                     self.all_plants += 1
                     self.add_plant(child)
-        # self.graph_drawer.render_graph()
 
     def add_plant(self, p):
         self.n_alive += 1
         self.plant_group.add(p)
         self.all_group.add(p)
-        # self.graph_drawer.add_node(p)
-        # self.graph_drawer.add_edge(p, p.parent)
 
     def is_collision(self, position, group):
         self.temp_sprite.rect = pygame.Rect(position[0], position[1], GRID_SIZE, GRID_SIZE)
