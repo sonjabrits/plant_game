@@ -45,7 +45,7 @@ class Plant(pygame.sprite.Sprite):
         self.age_rate = 1
         self.ages = [0, 105, 400, 600, 700, 750]
         self.spawn_r = 3
-        self.spawn_chance = 0.8
+        self.spawn_chance = 1.0
 
         self.state = GROWING
         self.all_images = {}

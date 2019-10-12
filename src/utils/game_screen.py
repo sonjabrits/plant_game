@@ -12,7 +12,9 @@ class GameHandler:
         textSurface = font.render(text, True, pygame.color.Color("black"))
         return textSurface, textSurface.get_rect()
 
-    def message_display(self, text, position=[0, 0]):
+    def message_display(self, text, position=None):
+        if position is None:
+            position = [int(display_width / 2), int(display_height / 2)]
         largeText = pygame.font.Font('freesansbold.ttf', 18)
         TextSurf, TextRect = self.text_objects(text, largeText)
         TextRect.center = ((display_width / 2), (display_height / 2))
