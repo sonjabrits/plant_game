@@ -1,6 +1,7 @@
 from src.GardenElements import *
 from src.utils.common_utils import *
 from src.utils.global_vars import *
+import pygame
 
 
 class Garden:

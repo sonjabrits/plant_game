@@ -1,6 +1,7 @@
 import os
 
 import names
+import pygame
 
 from src.Garden import *
 from src.utils.common_utils import *
