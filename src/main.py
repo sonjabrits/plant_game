@@ -50,8 +50,7 @@ if __name__ == "__main__":
                 if event.key == pygame.K_DOWN or event.key == ord('s'):
                     key_state[DOWN] = False
                 if event.key == ord('q'):
-                    pygame.quit()
-                    sys.exit()
+                    crashed = True
                     main = False
 
         my_garden.tick(counter)
@@ -76,4 +75,6 @@ if __name__ == "__main__":
                                     [int(SCREEN_SIZE[0] / 2), int(SCREEN_SIZE[1] / 2)])
 
     pygame.display.update()
-    pygame.time.wait(2000)
+    pygame.time.wait(5000)
+    pygame.quit()
+    sys.exit()
